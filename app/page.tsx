@@ -1,0 +1,1 @@
+export default function Home(){return <main><h1>LinkedIn Growth OS</h1><p>Supabase-backed, approval-first content workspace.</p><p>Publishing is disabled until the worker and OAuth are configured and tested.</p></main>}
