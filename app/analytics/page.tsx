@@ -1,0 +1,7 @@
+import {requireUser} from "@/lib/db";
+import {redirect} from "next/navigation";
+export default async function Analytics(){
+ let x;try{x=await requireUser()}catch{redirect("/login")}
+ const {data,error}=await x.db.from("post_metrics").select("impressions,reactions,comments,reposts,captured_at,source").order("captured_at",{ascending:false}).limit(50);
+ return <><h1>Analytics</h1><p className="muted">Only uploaded or authorized metrics are displayed. Missing impressions are never estimated.</p>{error&&<p role="alert" className="error">{error.message}</p>}{!data?.length&&<section className="card">No metrics recorded yet. Add metrics through the authenticated /api/metrics endpoint.</section>}{data?.map((m,i)=><article className="card" key={i}><div className="panel-title"><strong>{new Date(m.captured_at).toLocaleDateString()}</strong><span className="tag">{m.source}</span></div><p>{m.impressions??"N/A"} impressions · {m.reactions??"N/A"} reactions · {m.comments??"N/A"} comments · {m.reposts??"N/A"} reposts</p><p className="small muted">Engagement rate: {m.impressions&&m.impressions>0?(((m.reactions||0)+(m.comments||0)+(m.reposts||0))/m.impressions*100).toFixed(2)+"%":"N/A"}</p></article>)}</>;
+}

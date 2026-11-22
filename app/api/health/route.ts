@@ -1,0 +1,1 @@
+export async function GET(){return Response.json({ok:true,mode:process.env.PUBLISH_MODE==="live"?"live":"mock",service:"linkedin-growth-os"})}
